@@ -12,8 +12,10 @@ namespace Entities
         string Title { get; set; }
         TypeOfBook TypeOfEdition { get; set; }
         int Pages { get; set; }
-        int ISBN { get; set; }
+        long ISBN { get; set; }
 
-        int GenerateISBN(); 
+        long GenerateISBN();
+        int GenerateID();
+        string GetTypeOfBook();
     }
 }

@@ -6,22 +6,39 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class Anthology : IBook
+    public class Anthology : Book, IBook
     {
-        public int ID { get; set; }
-        public string Title { get; set; }
-        public TypeOfBook TypeOfEdition { get; set; }
-        public int Pages { get; set; }
-        public int ISBN { get; set; }
-
-
-        public string Ediotr { get; set; }
+        public string Editor { get; set; }
         public string Theme { get; set; }
         public List<Story> Stories { get; set; }
 
-        public int GenerateISBN()
+        public Anthology(string title, TypeOfBook typeOfBook, int pages, string editor) : base(title, typeOfBook, pages)
         {
-            throw new NotImplementedException();
+            Editor = editor;
+        }
+
+        public override string ToString()
+        {
+            return $"Title: {Title}, Editior: {Editor}, Number of stories: {Stories.Count}, Number of authors: {NumberOfAuthors()}";
+        }
+
+        public override string GetTypeOfBook()
+        {
+            return "Anthology";
+        }
+
+        public int NumberOfAuthors()
+        {
+            var authors = new List<string>();
+            foreach (var item in Stories)
+            {
+                if (!authors.Contains(item.AuthorName))
+                {
+                    authors.Add(item.AuthorName);
+                }
+            }
+
+            return authors.Count;
         }
     }
 }

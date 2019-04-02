@@ -10,7 +10,7 @@ namespace Entities
     {
         public string Title { get; set; }
         public StoryType StoryType { get; set; }
-        public string IsItOriginalStory { get; set; }
+        public bool IsItOriginalStory { get; set; }
         public string AuthorName { get; set; }
     }
 

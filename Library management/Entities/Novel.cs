@@ -6,21 +6,34 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class Novel : IBook
+    public class Novel : Book, IBook
     {
-        public int ID { get; set; }
-        public string Title { get; set; }
-        public TypeOfBook TypeOfEdition { get; set; }
-        public int Pages { get; set; }
-        public int ISBN { get; set; }
-
         public string Author { get; set; }
         public string Series { get; set; }
         public int SeriesNumber { get; set; }
 
-        public int GenerateISBN()
+        public Novel(string title, TypeOfBook typeOfBook, int pages, string author) : base(title, typeOfBook, pages)
         {
-            throw new NotImplementedException();
+            Author = author;
+        }
+
+        public override string ToString()
+        {
+            return $"Title: {Title}, Author: {Author}, {ShowSeries()} Pages: {Pages}";
+        }
+
+        public override string GetTypeOfBook()
+        {
+            return "Novel";
+        }
+
+        private string ShowSeries()
+        {
+            if (Series == null)
+            {
+                return "";
+            }
+            return $"Series: {Series} - part {SeriesNumber},";
         }
     }
 }
