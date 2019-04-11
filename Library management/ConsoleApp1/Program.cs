@@ -43,7 +43,7 @@ namespace ConsoleApp1
                     break;
                 }
                 Console.ReadLine();
-                Console.Clear();
+                Console.Clear();                
             }
         }
 
@@ -59,7 +59,8 @@ namespace ConsoleApp1
 
             var anthology = new Anthology("Zombie vs unicorns", TypeOfBook.Hardcover, 418, "Holy black");
             var story1 = new Story { Title = "Love will tear us apart", AuthorName = "Alaya johnson", StoryType = StoryType.Novella, IsItOriginalStory = true };
-            anthology.Stories = new List<Story> { story1 };
+            var story2 = new Story { Title = "Love will tear us apart", AuthorName = "Alaya johnson", StoryType = StoryType.Novella, IsItOriginalStory = true };
+            anthology.Stories = new List<Story> { story1, story2 };
 
             library.AddBook(new Novel("To kill a mockingbird", TypeOfBook.Papaerback, 384, "Harper Lee"));
             library.AddBook(new Novel("The Fellowship of the Ring", TypeOfBook.EBook, 423, "J. R. R. Tolkien") { Series = "The lord of the rings", SeriesNumber = 1 });

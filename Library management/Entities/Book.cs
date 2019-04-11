@@ -27,7 +27,6 @@ namespace Entities
         {
 
         }
-
         public virtual string GetTypeOfBook()
         {
             return "Book";
