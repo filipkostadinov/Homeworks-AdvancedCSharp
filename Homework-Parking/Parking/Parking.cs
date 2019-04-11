@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ParkingProject
 {
-    public class Parking<T>
+    public class Parking<T> where T : IVehicle
     {
         public int Capacity { get; private set; }
         public int Occupancy { get; private set; }
@@ -26,14 +26,14 @@ namespace ParkingProject
             Occupancy = 0;
         }
 
-        public void ParkVehicle(T vehicle)
+        public void ParkVehicle(T vehicle, Parking<IVehicle> parking)
         {
             if (FreeCapacity > 0)
             {
                 Occupancy += 1;
                 parkedVehicles.Add(vehicle);
+                vehicle.Parking = parking;
 
-                vehicle.Parking = this;  // *
             }
         }
 

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ParkingProject
 {
-    public class Boat
+    public class Boat : IVehicle
     {
         public string Name { get; set; }
         public bool BesPlatno { get; set; }
-        public Parking<Boat> Parking { get; set; }
+        public Parking<IVehicle> Parking { get; set; }
     }
 }
