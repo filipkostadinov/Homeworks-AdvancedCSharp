@@ -19,20 +19,23 @@ namespace ParkingProject
         }
 
         private List<T> parkedVehicles = new List<T>();
+        public Parking()
+        {
 
+        }
         public Parking(int capacity)
         {
             Capacity = capacity;
             Occupancy = 0;
         }
 
-        public void ParkVehicle(T vehicle, Parking<IVehicle> parking)
+        public void ParkVehicle(T vehicle)
         {
             if (FreeCapacity > 0)
             {
                 Occupancy += 1;
                 parkedVehicles.Add(vehicle);
-                vehicle.Parking = parking;
+                vehicle.Parking = this as Parking<IVehicle>;
 
             }
         }
@@ -43,8 +46,8 @@ namespace ParkingProject
             {
                 Occupancy -= 1;
                 parkedVehicles.Remove(vehicle);
-
                 vehicle.Parking = null; // *
+
             }
         }
 

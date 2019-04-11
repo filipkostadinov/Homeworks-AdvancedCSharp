@@ -10,21 +10,27 @@ namespace ParkingProject
     {
         static void Main(string[] args)
         {
-            Parking<IVehicle> poc = new Parking<IVehicle>(100);
+            Parking<Car> poc = new Parking<Car>(100);
             Car astra = new Car
             {
                 Make = "Opel",
                 Model = "Astra"
             };
+            
+            poc.ParkVehicle(astra);
+            poc.LeaveVehicle(astra);
 
-            poc.ParkVehicle(astra, poc);
-
-            //astra.LeaveParking();
-
-            Parking<IVehicle> marina = new Parking<IVehicle>(50);
+            Parking<Boat> marina = new Parking<Boat>(50);
             Boat jenny = new Boat() { Name = "Jenny", BesPlatno = true };
+            Boat jenny1 = new Boat() { Name = "Jenny1", BesPlatno = true };
+            Boat jenny2 = new Boat() { Name = "Jenny2", BesPlatno = true };
+            Boat jenny3 = new Boat() { Name = "Jenny3", BesPlatno = true };
 
-            marina.ParkVehicle(jenny, marina);
+            marina.ParkVehicle(jenny);
+            marina.ParkVehicle(jenny1);
+            marina.ParkVehicle(jenny2);
+            marina.ParkVehicle(jenny3);
+            marina.LeaveVehicle(jenny2);
 
             Console.WriteLine(marina.FreeCapacity);
             Console.WriteLine(marina.Occupancy);

@@ -15,10 +15,5 @@
             }
         }
         public Parking<IVehicle> Parking { get; set; }
-
-        public void LeaveParking()
-        {
-            Parking.LeaveVehicle(this);
-        }
     }
 }
