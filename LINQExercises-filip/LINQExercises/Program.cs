@@ -193,7 +193,10 @@ namespace LINQExercises
             Console.WriteLine("Persons that have just one race type dogs");
             Console.WriteLine();
 
-            var peopleWithOneTypeDog = people.Where(p => p.Dogs.Count() >= 1).Where(p => DogRace(p.Dogs));
+            var peopleWithOneTypeDog = people
+                .Where(p => p.Dogs.Count() >= 1)
+                .Where(p => DogRace(p.Dogs));
+
             Print(peopleWithOneTypeDog);
 
             // 5. Find and print all Freddy`s dogs names older than 1 year, grouped by dogs race.
@@ -210,23 +213,56 @@ namespace LINQExercises
 
             // 7. Find and print all dogs names from Cristofer, Freddy, Erin and Amelia, grouped by color and ordered by name - ASCENDING ORDER.
 
-            var dogsByCFEA = new List<Dog>();
-            dogsByCFEA.AddRange(cristofer.Dogs);
-            dogsByCFEA.AddRange(freddy.Dogs);
-            dogsByCFEA.AddRange(erin.Dogs);
-            dogsByCFEA.AddRange(amelia.Dogs);
+            //var dogsByCFEA = new List<Dog>();
+            //dogsByCFEA.AddRange(cristofer.Dogs);
+            //dogsByCFEA.AddRange(freddy.Dogs);
+            //dogsByCFEA.AddRange(erin.Dogs);
+            //dogsByCFEA.AddRange(amelia.Dogs);
 
+            // Dont know how to use GroupBy
+            
             //var orderDogsByCFEA = dogsByCFEA.GroupBy(d => d.Name).OrderBy(d => d.Color);
             //Print(orderDogsByCFEA);
 
             // 8. Find and persons that have same dogs races and order them by name length ASCENDING, then by age DESCENDING.
             Console.WriteLine("persons that have same dogs races and order them by name length ASCENDING,then by age DESCENDING");
 
-            var personsWithSameRace = people.Where(p => p.Dogs.Count() >= 1).Where(p => SameDogRaces(p.Dogs)).OrderBy(p => p.FirstName.Length);
-            Print(personsWithSameRace);
+            var personsWithSameRace = people
+                .Where(p => p.Dogs.Count() >= 1)
+                .Where(p => SameDogRaces(p.Dogs))
+                .OrderBy(p => p.FirstName.Length);
 
+            Print(personsWithSameRace);
+            Print(personsWithSameRace.OrderByDescending(p => p.Age));
             // 9. Find the last dog of Amelia and print all dogs form other persons older than Amelia, ordered by dogs age DESCENDING.
+
+            var lastDogOfAmelia = amelia.Dogs.Last();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Last dog of amelia: " + lastDogOfAmelia.Name);
+            Console.ForegroundColor = ConsoleColor.Gray;
+
+            Console.WriteLine();
+            var dogsFromPeopleOlderThanAmelia = people
+                .Where(p => p.Dogs.Count() > 0)
+                .Where(p => p.Age > amelia.Age)
+                .Select(p => p.Dogs);
+
+            Console.WriteLine("All dogs form other persons older than Amelia");
+            Console.WriteLine();
+            foreach (var item in dogsFromPeopleOlderThanAmelia)
+            {
+                Print(item);
+            }
+
             // 10. Find all developers older than 20 with more than 1 dog that contains letter 'e' in the name and print their names and job positions.
+
+            var developers = people
+                .Where(p => p.Occupation == Job.Developer)
+                .Where(p => p.Age >= 20)
+                .Where(p => p.Dogs.Count > 1)
+                .Where(p => p.FirstName.ToLower().Contains("e"));
+
+            Print(developers);
 
             #endregion
         }
