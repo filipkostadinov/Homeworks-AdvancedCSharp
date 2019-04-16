@@ -46,7 +46,7 @@ namespace ShowAuthorsConsole
 
 
             //4 Which author has the shortest average title for a book? (Discount authors with less than three books)
-            var shortestAverage2 = authors.Where(a => a.Books.Count() > 3).Select(x => new
+            var shortestAverage2 = authors.Where(a => a.Books.Count() >= 3).Select(x => new
             {
                 x.Name,
                 shortestAverage = x.Books.Average(b => b.Title.Length)
@@ -91,7 +91,7 @@ namespace ShowAuthorsConsole
             var authorMostDifferentSeries = authors.Select(a => new
             {
                 a.Name,
-                differentSeries = a.Books.GroupBy(b => b.Series).Count()
+                differentSeries = a.Books.GroupBy(b => b.Series).Count() - 1
             }).OrderByDescending(b => b.differentSeries).ThenBy(a => a.Name).ToList();
 
             Console.WriteLine($@"Authors with most different series are : 
@@ -129,39 +129,43 @@ namespace ShowAuthorsConsole
 
             // Bonus 1 What series has the most authors?
 
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Wait 6-7 seconds");
-            Console.ForegroundColor = ConsoleColor.Gray;
-
             var seriesWithMostAuthors = authors
-                 .SelectMany(a => a.Books)
-                 .Where(b => b.SeriesIndex != null && !string.IsNullOrEmpty(b.Series))
-                 .Select(s => new
+                 .SelectMany(a => a.Books.Select(b => new
                  {
-                     s.Title,
-                     Author = authors.Where(a => a.Books.Contains(s)).First().Name
-                 }).GroupBy(b => b.Title).OrderByDescending(b => b.Count()).First();
+                     b.Title,
+                     b.Series,
+                     Author = a.Name
+                 }))
+                 .Where(b => !string.IsNullOrEmpty(b.Series))
+                 .GroupBy(b => b.Series)
+                 .Select(g => new
+                 {
+                     Series = g.Key,
+                     NumAuthors = g.Select(s => s.Author).Distinct().Count()                    
+                 })
+                 .OrderByDescending(g => g.NumAuthors).First();
 
-            Console.WriteLine($"Series with most authors is : {seriesWithMostAuthors.Key} ({seriesWithMostAuthors.Count()} authors)");
+            Console.WriteLine($"Series with most authors is : {seriesWithMostAuthors.Series} ({seriesWithMostAuthors.NumAuthors} authors)");
 
             line(12);
 
             // Bonus 2 In Which year most authors published a book?
 
             var yearMostAuthorsPublished = authors
-                 .SelectMany(a => a.Books)
-                 .GroupBy(b => b.Year)
-                 .Select(y => y.Key)
-                 .Select(y => new
+                 .SelectMany(a => a.Books.Select(b => new
                  {
-                     y,
-                     Authors = authors.Select(a => new
-                     {
-                         Years = a.Books.Select(b => b.Year).Distinct()
-                     }).Where(a => a.Years.Contains(y))
-                 }).OrderByDescending(y => y.Authors.Count()).First();
+                     b.Title,
+                     b.Year,
+                     Author = a.Name
+                 }))
+                 .GroupBy(b => b.Year)
+                 .Select(g => new
+                 {
+                     Year = g.Key,
+                     NumberAuthors = g.Select(b => b.Author).Distinct().Count()
+                 }).OrderByDescending(y => y.NumberAuthors).First();
 
-            Console.WriteLine($"The year with most different authors pubslished a book is : {yearMostAuthorsPublished.y} ({yearMostAuthorsPublished.Authors.Count()} authors)");
+            Console.WriteLine($"The year with most different authors pubslished a book is : {yearMostAuthorsPublished.Year} ({yearMostAuthorsPublished.NumberAuthors} authors)");
 
             line(13);
 
@@ -179,13 +183,29 @@ namespace ShowAuthorsConsole
 
             // Bonus 4 How long is the longest hiatus between two books for an author, and by whom?
 
-            var longestHiatus = authors.Select(a => new
+            //var longestHiatus = authors.Select(a => new
+            //{
+            //    a.Name,
+            //    LongestBreak = BiggestDifference(a.Books.OrderByDescending(b => b.Year).Select(x => x.Year).ToList())
+            //}).OrderByDescending(a => a.LongestBreak).First();
+
+
+            var hiatus = authors.Select(a => new
             {
                 a.Name,
-                LongestBreak = BiggestDifference(a.Books.OrderByDescending(b => b.Year).Select(x => x.Year).ToList())
-            }).OrderByDescending(a => a.LongestBreak).First();
+                Years = a.Books.Select(b => b.Year).OrderBy(y => y)
+            }).Select(a => new
+            {
+                a.Name,
+                Hiatus = a.Years.Select((year, index) =>
+                {
+                    if (index == 0)
+                        return 0;
+                    return year - a.Years.ElementAt(index - 1);
+                }).Max()
+            }).OrderByDescending(a => a.Hiatus).Take(100).First();
 
-            Console.WriteLine($"The longest break between two books has : {longestHiatus.Name} ({longestHiatus.LongestBreak} years)");
+            Console.WriteLine($"The longest break between two books has : {hiatus.Name} ({hiatus.Hiatus} years)");
 
             line(15);
         }
