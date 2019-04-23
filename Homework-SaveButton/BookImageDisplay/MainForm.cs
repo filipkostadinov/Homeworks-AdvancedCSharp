@@ -47,7 +47,7 @@ namespace BookImageDisplay
             var book = lbxBooks.SelectedItem as Book;
 
             var bookOneOrMoreAuthors = authors
-                .SelectMany(a => a.Books.Where(b => b.Title == book.Title)
+                .SelectMany(a => a.Books.Where(b => b.ID == book.ID)
                 .Select(b => new
                 {
                     a.Name,
@@ -55,7 +55,9 @@ namespace BookImageDisplay
                 })).GroupBy(b => b.Name)
                 .Select(g => string.Join("", g.Key.Split(' ').Select(part => part[0])).ToLower());
 
-            var authorInitials = string.Join("", bookOneOrMoreAuthors); 
+            var authorInitials = string.Join("", bookOneOrMoreAuthors);
+
+            //var authorInitials = string.Join("", author.Name.Split(' ').Select(part => part[0])).ToLower();
 
             var bookName = string.Join("", book.Title.Split(' '));
             bookName = Regex.Replace(bookName, "[']", "");
